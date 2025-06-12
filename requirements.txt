@@ -1,0 +1,16 @@
+pyspark==3.5.0
+pandas==2.2.2
+numpy==1.26.4
+scikit-learn==1.4.2
+xgboost==2.0.3
+transformers==4.40.1
+torch==2.3.0
+mlflow==2.12.1
+optuna==3.6.1
+
+# 시각화/분석
+matplotlib==3.8.4
+seaborn==0.13.2
+
+# 기타 유틸
+tqdm==4.66.4
