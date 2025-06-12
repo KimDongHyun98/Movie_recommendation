@@ -7,6 +7,7 @@
 ## 개요(Overview)
 
 본 프로젝트는 사용자의 영화 시청 기록과 콘텐츠(장르) 정보를 기반으로 **개인화된 영화 추천**을 제공하는 시스템입니다.
+
 **Azure Databricks**환경에서 **Pyspark 기반 추천 모델**을 구현하고,
 **MLflow**를 통해 모델을 관리·배포 하며, **Flask**로 웹 서비스를 구축하여 추천 결과를 제공합니다.
 
@@ -24,11 +25,18 @@
 
 -**데이터 저장 및 관리**: Unity Catalog 사용
 
--**데이터 레이어 구조**:
-    -'bronze': 원본 데이터 적재 (MovieLens)
-    
+-**데이터 레이어 구조**: Medallion Architecture (Delta Lake)
+
+Delta Lake의 Medallion Architecture에 따라 데이터를 계층적으로 처리하여, 신뢰성 있고 재사용 가능한 데이터 파이프라인을 구성하였습니다.
+
+![image](https://github.com/user-attachments/assets/a8165b9e-a520-4678-941e-a9f80c653f16)
+출처: [Databricks - Medallion Architecture](https://www.databricks.com/glossary/medallion-architecture)
+
+
+
+
+    -'bronze': 원본 데이터 적재 (MovieLens)    
     -'silver': 데이터 정제 및 통합 (평점수 기반 필터링)
-    
     -'gold': 추천 특성 추출 및 전처리 완료 데이터셋
    
 ---
@@ -53,59 +61,34 @@
 
 ## 서비스 구축(Deployment)
 
-- **MLflow Model Registry
+- **MLflow Model Registry**
 
     추천 모델 등록, 버전 관리 및 자동 로드, 서빙, 최종 배포 모델은 BERT 기반 장르 임베딩 모델 사용
     
 - **Flask 웹 서비스**
 
     -**입력**: 사용자가 재밌게 본 영화 목록
+    ![image](https://github.com/user-attachments/assets/a4ea184a-ce8b-47d5-8238-36ab2e6b3377)
   
     -**출력**: 추천 영화 목록 (TMDB 포스터 이미지 포함)
+    ![image](https://github.com/user-attachments/assets/3b344e73-cc74-4474-a323-85bafe677b6b)
+
+
   
     -**구현 방식**: 모델 예측 -> 추천 영화 ID 추출 -> TMDB 이미지 연동
 
----
 
-## 프로젝트 구조(Project Structure)
-├── data_preprocessing/ # 원본 및 전처리 노트북
-│ ├── bronze_layer.ipynb # 원천 데이터 적재
-│ │
-│ ├── silver_layer.ipynb # 전처리 및 통합
-│ │
-│ └── gold_layer.ipynb # feature 추출 완료
-│
-│
-├── models/ # 추천 모델 구현
-│ ├── recommendation_algorithms/ # ALS, 콘텐츠 기반 등
-│ │
-│ ├── machine_learning/ # SparkXGB 모델
-│ │
-│ └── deep_learning/ # BERT 기반 임베딩
-│
-├── service/ # 웹 서비스 구현
-│ ├── app.py # Flask 메인 서버
-│ │
-│ ├── recommendation_service.py # 추천 로직 처리
-│ │
-│ ├── mlflow_model_load_test.ipynb # 모델 로드 테스트
-│ │
-│ └── templates/ # HTML 템플릿
-│
-├── config.py # 경로 및 설정 관리
-│
-└── README.md
+
+
+
 
 ---
 
 ## 사용 기술 스택 (Tech Stack)
 - **데이터 처리**: PySpark, Unity Catalog  
-
 - **모델링**: ALS, XGBoost, BERT  
-
 - **모델 관리**: MLflow  
-
 - **서비스 배포**: Flask, HTML  
-
 - **인프라**: Azure Databricks
+
 
