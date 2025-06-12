@@ -47,15 +47,25 @@ Delta Lake의 Medallion Architecture에 따라 데이터를 계층적으로 처�
 
 -**ALS(Alternating Least Squares)**: 사용자-아이템 평점 행렬 기반 협업 필터링
 
+
 -**콘텐츠 기반 추천**: 장르 정보 -> CountVectorizer -> Cosine Similarty 기반 유사 영화 추천
-    
+        
+
 ### 2. 머신러닝(ML)
 
 -**SparXGBClassifier (XGBoost)**: 사용자 및 영화 특성을 바탕으로 평점 4점 이상 여부 예측
 
+    -장르 컬럼을 숫자 벡터로 변환하는 파이프라인 구축
+    -Optuna 사용해 하이퍼파라미터 최적화
+    -SHAP을 이용한 Feature Importance 확인하여 해석력 높임
+
 ### 3. 딥러닝(DL)
 
 -**BERT 기반 장르 임베딩**: 영화 설명 텍스트를 임베딩하여 사용자 관심사와 유사한 영화 추천 
+
+    -기존 BERT모델에 장르 정보를 임베딩 벡터로 변환하여 학습
+    -영화의 장르 정보를 원-핫 인코딩하여 모델의 입력 데이터로 결합
+    -**MLM(Masked Language Model)** 학습 전략 사용 *시퀀스의 일부를 의도적으로 가리고, 모델이 주변 문맥을 통해 가려진 부분을 예측하도록 훈련
 
 ---
 
@@ -72,14 +82,8 @@ Delta Lake의 Medallion Architecture에 따라 데이터를 계층적으로 처�
   
     -**출력**: 추천 영화 목록 (TMDB 포스터 이미지 포함)
     ![image](https://github.com/user-attachments/assets/3b344e73-cc74-4474-a323-85bafe677b6b)
-
-
   
     -**구현 방식**: 모델 예측 -> 추천 영화 ID 추출 -> TMDB 이미지 연동
-
-
-
-
 
 
 ---
